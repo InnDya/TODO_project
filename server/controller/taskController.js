@@ -4,7 +4,7 @@ exports.getList = async (req, res) => {
     try {
         const listOfTasks = await Task.find({});
         console.log(listOfTasks);
-        res.status(200).json({ data: listOfTasks });
+        res.status(200).json(listOfTasks);
     } catch (err) {
         console.log(err);
     }
