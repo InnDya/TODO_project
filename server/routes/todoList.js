@@ -1,8 +1,8 @@
 const express = require('express');
-const { getList } = require('../controller/taskController');
+const { allLists } = require('../controller/todoListController');
 
 const router = express.Router();
 
-router.get('/', getList);
+router.get('/', allLists);
 
 module.exports = router;
