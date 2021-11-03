@@ -5,8 +5,8 @@ import ListPage from './pages/ListPage';
 
 function App() {
   return (
-    <div>
-      <h1>TODO</h1>
+    <div className="container">
+      <h1 className="text-center mt-5">Tasks List</h1>
       <Switch>
         <Route path='/'>
           <ListPage />

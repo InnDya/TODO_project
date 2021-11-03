@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import List from '../pages/OneList';
 
 export default function ListPage() {
-    const [taskList, setTaskList] = useState([]);
+    const [todoLists, setTodoLists] = useState([]);
 
-    function getTaskList() {
-        const url = 'http://localhost:3000/api/tasks'
+    function getTodoLists() {
+        const url = 'http://localhost:3000/api/todo'
         fetch(url)
             .then(res => res.json())
-            .then(data => setTaskList(data));
+            .then(data => setTodoLists(data));
     }
 
     useEffect(() => {
-        getTaskList();
+        getTodoLists();
     }, []);
 
-    console.log(taskList);
+    console.log(todoLists);
 
     return (
         <div>
-        {!taskList && (<div>Loading...</div>)}
-        <ul>
-            {taskList && taskList.map((item) => (
-                <li key={item._id}>
-                    {item.task}
-                </li>
-            ))
-            }
-        </ul>
+            {!todoLists && (<div>Loading...</div>)}
+                <div className="row">
+                    {todoLists && todoLists.map((list) => {
+                        return (
+                            <List key={list._id} list={list}/>
+                        )
+                    })}
+                </div>
         </div>
     )
 }
