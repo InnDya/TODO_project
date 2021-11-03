@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import List from '../pages/OneList';
+import TodoList from './TodoList';
 
 export default function ListPage() {
-    const [todoLists, setTodoLists] = useState([]);
+    const [data, setData] = useState([]);
 
     function getTodoLists() {
         const url = 'http://localhost:3000/api/todo'
         fetch(url)
             .then(res => res.json())
-            .then(data => setTodoLists(data));
+            .then(data => setData(data));
     }
 
     useEffect(() => {
         getTodoLists();
     }, []);
 
-    console.log(todoLists);
+    console.log(data);
 
     return (
         <div>
-            {!todoLists && (<div>Loading...</div>)}
-                <div className="row">
-                    {todoLists && todoLists.map((list) => {
+            {!data && (<div>Loading...</div>)}
+                <div className="row justify-content-md-center">
+                    {data && data.map((todoList) => {
                         return (
-                            <List key={list._id} list={list}/>
+                            <TodoList key={todoList._id} list={todoList}/>
                         )
                     })}
                 </div>
