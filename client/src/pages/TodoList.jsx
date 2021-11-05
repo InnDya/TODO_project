@@ -1,4 +1,6 @@
 import React from 'react';
+import { Trash, Plus } from 'react-bootstrap-icons';
+
 const moment = require('moment');
 
 export default function TodoList({ list }) {
@@ -6,6 +8,16 @@ export default function TodoList({ list }) {
     const editTask = (e) => {
         e.preventDefault();
         console.log(e.target.defaultValue);
+    }
+
+    const deleteTodoList = (e) => {
+        e.preventDefault();
+        console.log('was clicked delete todo list');
+    }
+
+    const addNewTaskToList = (e) => {
+        e.preventDefault();
+        console.log('was clicked button add new task');
     }
 
     return (
@@ -29,8 +41,23 @@ export default function TodoList({ list }) {
                         </li>
                     )}
                 </ul>
+                <div className="mb-4">
+                    <button 
+                        className="btn-primary" 
+                        onClick={(e) => addNewTaskToList(e)}>
+                    <Plus size={20} />
+                    </button> Add new task
+                </div>
+                <div className="position-absolute bottom-0 start-0 text-muted">
                 {moment(list.last_modified).fromNow()}
+                </div>
             </div>
+            <Trash 
+                size={26} 
+                color="royalblue" 
+                className="position-absolute bottom-0 end-0"
+                onClick={(e)=> deleteTodoList(e)}
+            />
         </div>
     )
 }

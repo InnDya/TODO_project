@@ -12,12 +12,10 @@ code {
     monospace;
 }
 
-#card {
-  width: 18rem;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
 }
 
-.textInput {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #dfdfdf;
+#card {
+  width: 18rem;
 }
