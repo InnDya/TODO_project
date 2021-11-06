@@ -7,7 +7,7 @@ import NewList from './pages/NewList';
 function App() {
   return (
     <div className="container">
-      <h1 className="text-center mt-5">Tasks List</h1>
+      <h1 className="text-center mt-3">Tasks List</h1>
       <NewList />
       <Switch>
         <Route path='/'>

@@ -10,9 +10,19 @@ export default function TodoList({ list }) {
         console.log(e.target.defaultValue);
     }
 
-    const deleteTodoList = (e) => {
+    const deleteTodoList = (e, id) => {
         e.preventDefault();
         console.log('was clicked delete todo list');
+        console.log(id);
+
+        fetch(`http://localhost:3000/api/todo/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then((res) => {console.log(res)})
+        .catch((err) => {console.log(err)});
     }
 
     const addNewTaskToList = (e) => {
@@ -56,7 +66,7 @@ export default function TodoList({ list }) {
                 size={26} 
                 color="royalblue" 
                 className="position-absolute bottom-0 end-0"
-                onClick={(e)=> deleteTodoList(e)}
+                onClick={(e)=> deleteTodoList(e, list._id)}
             />
         </div>
     )
