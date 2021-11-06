@@ -16,6 +16,11 @@ export default function ListPage() {
         getTodoLists();
     }, []);
 
+    const onListDeleted = (id) => {
+        console.log("onListDeleted(" + id + ")");
+        setData(data.filter(obj => obj._id !== id));
+    };
+
     console.log(data);
 
     return (
@@ -24,7 +29,11 @@ export default function ListPage() {
                 <div className="row justify-content-md-center">
                     {data && data.map((todoList) => {
                         return (
-                            <TodoList key={todoList._id} list={todoList}/>
+                            <TodoList 
+                                key={todoList._id} 
+                                list={todoList}
+                                deleteHandler={onListDeleted}
+                            />
                         )
                     })}
                 </div>

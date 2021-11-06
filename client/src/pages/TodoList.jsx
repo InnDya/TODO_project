@@ -3,7 +3,7 @@ import { Trash, Plus } from 'react-bootstrap-icons';
 
 const moment = require('moment');
 
-export default function TodoList({ list }) {
+export default function TodoList({ list, deleteHandler }) {
 
     const editTask = (e) => {
         e.preventDefault();
@@ -21,7 +21,10 @@ export default function TodoList({ list }) {
                 'Accept': 'application/json'
             }
         })
-        .then((res) => {console.log(res)})
+        .then((res) => {
+            console.log(res);
+            deleteHandler(id);
+        })
         .catch((err) => {console.log(err)});
     }
 
