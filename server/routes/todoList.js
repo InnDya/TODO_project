@@ -1,8 +1,9 @@
 const express = require('express');
-const { allLists } = require('../controller/todoListController');
+const { allLists, deleteOneList } = require('../controller/todoListController');
 
 const router = express.Router();
 
 router.get('/', allLists);
+router.delete('/:id', deleteOneList);
 
 module.exports = router;

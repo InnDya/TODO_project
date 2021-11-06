@@ -9,3 +9,14 @@ exports.allLists = async (req, res) => {
         console.log(err);
     }
 };
+
+exports.deleteOneList = async (req, res) => {
+    console.log(req.params);
+    try {
+        await TodoList.findByIdAndDelete(req.params.id);
+        res.status(204).end();
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+}
