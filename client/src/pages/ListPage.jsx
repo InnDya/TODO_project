@@ -21,6 +21,12 @@ export default function ListPage() {
         setData(data.filter(obj => obj._id !== id));
     };
 
+    const onListChanged = (id, task) => {
+        let tempData = [...data];
+        tempData.find(obj => obj._id === id).tasks.push(task);
+        setData(tempData);
+    }
+
     console.log(data);
 
     return (
@@ -30,9 +36,10 @@ export default function ListPage() {
                     {data && data.map((todoList) => {
                         return (
                             <TodoList 
-                                key={todoList._id} 
+                                key={todoList._id}
                                 list={todoList}
                                 deleteHandler={onListDeleted}
+                                newTaskHandler={onListChanged}
                             />
                         )
                     })}

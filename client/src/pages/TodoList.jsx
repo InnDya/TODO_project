@@ -3,7 +3,7 @@ import { Trash, Plus } from 'react-bootstrap-icons';
 
 const moment = require('moment');
 
-export default function TodoList({ list, deleteHandler }) {
+export default function TodoList({ list, deleteHandler, newTaskHandler }) {
 
     const editTask = (e) => {
         e.preventDefault();
@@ -28,9 +28,22 @@ export default function TodoList({ list, deleteHandler }) {
         .catch((err) => {console.log(err)});
     }
 
-    const addNewTaskToList = (e) => {
+    const addNewTask = (e, id) => {
         e.preventDefault();
         console.log('was clicked button add new task');
+
+        fetch(`http://localhost:3000/api/todo/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(task => {
+            console.log(task);
+            newTaskHandler(id, task);
+        })
+        .catch((err) => {console.log(err)});
     }
 
     return (
@@ -57,7 +70,7 @@ export default function TodoList({ list, deleteHandler }) {
                 <div className="mb-4">
                     <button 
                         className="btn-primary" 
-                        onClick={(e) => addNewTaskToList(e)}>
+                        onClick={(e) => addNewTask(e, list._id)}>
                     <Plus size={20} />
                     </button> Add new task
                 </div>
