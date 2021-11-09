@@ -1,14 +1,9 @@
 import React from 'react';
-import { Trash, Plus } from 'react-bootstrap-icons';
+import { Trash, Plus, XLg } from 'react-bootstrap-icons';
 
 const moment = require('moment');
 
 export default function TodoList({ list, deleteHandler, newTaskHandler }) {
-
-    const editTask = (e) => {
-        e.preventDefault();
-        console.log(e.target.defaultValue);
-    }
 
     const saveTask = (e, listId, taskId) => {
         e.preventDefault();
@@ -23,6 +18,11 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
         })
         .then(res => console.log(res))
         .catch((err) => {console.log(err)});
+    }
+
+    const deleteTask = (e) => {
+        e.preventDefault();
+        console.log('was clicked button delete task');
     }
 
     const deleteTodoList = (e, id) => {
@@ -63,7 +63,7 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
 
     return (
         <div id="card" className="card mt-5 mx-5 border border-primary">
-            <div className="card-body">
+            <div className="card-body px-1">
                 <h5 className="card-title text-center text-primary">{list.title}</h5>
                 <ul className="list-group mb-4">
                     {list.tasks.map((task) =>
@@ -76,7 +76,6 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
                                     className="form-control" 
                                     aria-label="Text input with checkbox" 
                                     defaultValue={task.task}
-                                    onClick={(e)=> editTask(e)}
                                     onBlur={(e) => saveTask(e, list._id, task._id)}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
@@ -84,6 +83,9 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
                                         }
                                     }}
                                 />
+                                <button className="btn btn-outline" onClick={(e) => deleteTask(e)}>
+                                    <XLg color="royalblue" size={16} />
+                                </button>
                             </div>
                         </li>
                     )}
