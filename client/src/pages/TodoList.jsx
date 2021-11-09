@@ -10,6 +10,21 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
         console.log(e.target.defaultValue);
     }
 
+    const saveTask = (e, listId, taskId) => {
+        e.preventDefault();
+        const data = {task: e.target.value};
+        fetch(`http://localhost:3000/api/todo/${listId}/task/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => console.log(res))
+        .catch((err) => {console.log(err)});
+    }
+
     const deleteTodoList = (e, id) => {
         e.preventDefault();
         console.log('was clicked delete todo list');
@@ -62,6 +77,12 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
                                     aria-label="Text input with checkbox" 
                                     defaultValue={task.task}
                                     onClick={(e)=> editTask(e)}
+                                    onBlur={(e) => saveTask(e, list._id, task._id)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            saveTask(e, list._id, task._id)
+                                        }
+                                    }}
                                 />
                             </div>
                         </li>
