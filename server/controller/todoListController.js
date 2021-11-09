@@ -48,9 +48,19 @@ exports.changeTask = async (req, res) => {
         }, {
             $set: {
                 'tasks.$.task': req.body.task,
-                'last_modified': Date.now()
             }
         });
+        res.status(204).end();
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+}
+
+exports.deleteTask = async (req, res) => {
+    try {
+        await TodoList.updateOne({ _id: req.params.listId },
+            { $pull: { tasks: { _id: req.params.taskId } } });
         res.status(204).end();
     } catch (err) {
         console.log(err);

@@ -27,7 +27,12 @@ export default function ListPage() {
         setData(tempData);
     }
 
-    console.log(data);
+    const onTaskDeleted = (listId, taskId) => {
+        const tempData = [...data];
+        const list = tempData.find(obj => obj._id === listId);
+        list.tasks = list.tasks.filter(task => task._id !== taskId);
+        setData(tempData);
+    }
 
     return (
         <div>
@@ -40,6 +45,7 @@ export default function ListPage() {
                                 list={todoList}
                                 deleteHandler={onListDeleted}
                                 newTaskHandler={onListChanged}
+                                deleteTaskHandler={onTaskDeleted}
                             />
                         )
                     })}

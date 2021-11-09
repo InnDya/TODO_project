@@ -3,11 +3,12 @@ import { Trash, Plus, XLg } from 'react-bootstrap-icons';
 
 const moment = require('moment');
 
-export default function TodoList({ list, deleteHandler, newTaskHandler }) {
+export default function TodoList({ list, deleteHandler, newTaskHandler, deleteTaskHandler }) {
 
     const saveTask = (e, listId, taskId) => {
         e.preventDefault();
-        const data = {task: e.target.value};
+        const ts = Date.now();
+        const data = {task: e.target.value, ts: ts};
         fetch(`http://localhost:3000/api/todo/${listId}/task/${taskId}`, {
             method: 'PUT',
             headers: {
@@ -20,9 +21,24 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
         .catch((err) => {console.log(err)});
     }
 
-    const deleteTask = (e) => {
+    const deleteTask = (e, listId, taskId) => {
         e.preventDefault();
         console.log('was clicked button delete task');
+        const ts = Date.now();
+        const data = {ts: ts};
+        fetch(`http://localhost:3000/api/todo/${listId}/task/${taskId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((res) => {
+            console.log(res);
+            deleteTaskHandler(listId, taskId);
+        })
+        .catch((err) => {console.log(err)});
     }
 
     const deleteTodoList = (e, id) => {
@@ -83,7 +99,7 @@ export default function TodoList({ list, deleteHandler, newTaskHandler }) {
                                         }
                                     }}
                                 />
-                                <button className="btn btn-outline" onClick={(e) => deleteTask(e)}>
+                                <button className="btn btn-outline" onClick={(e) => deleteTask(e, list._id, task._id)}>
                                     <XLg color="royalblue" size={16} />
                                 </button>
                             </div>
