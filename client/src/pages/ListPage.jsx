@@ -21,19 +21,6 @@ export default function ListPage() {
         setData(data.filter(obj => obj._id !== id));
     };
 
-    const onListChanged = (id, task) => {
-        let tempData = [...data];
-        tempData.find(obj => obj._id === id).tasks.push(task);
-        setData(tempData);
-    }
-
-    const onTaskDeleted = (listId, taskId) => {
-        const tempData = [...data];
-        const list = tempData.find(obj => obj._id === listId);
-        list.tasks = list.tasks.filter(task => task._id !== taskId);
-        setData(tempData);
-    }
-
     return (
         <div>
             {!data && (<div>Loading...</div>)}
@@ -42,10 +29,8 @@ export default function ListPage() {
                         return (
                             <TodoList 
                                 key={todoList._id}
-                                list={todoList}
+                                data={todoList}
                                 deleteHandler={onListDeleted}
-                                newTaskHandler={onListChanged}
-                                deleteTaskHandler={onTaskDeleted}
                             />
                         )
                     })}

@@ -31,7 +31,10 @@ exports.addNewTask = async (req, res) => {
         const task = { _id: taskId, task: '', status: false };
         await TodoList.findOneAndUpdate(
             { _id: req.params.id },
-            { $push: { tasks: task } }
+            {
+                $push: { tasks: task },
+                $set: { 'last_modified': req.body.ts }
+            }
         );
         res.status(200).json(task);
     } catch (err) {
@@ -48,6 +51,7 @@ exports.changeTask = async (req, res) => {
         }, {
             $set: {
                 'tasks.$.task': req.body.task,
+                'last_modified': req.body.ts,
             }
         });
         res.status(204).end();
