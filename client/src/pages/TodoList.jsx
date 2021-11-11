@@ -10,7 +10,6 @@ export default function TodoList({ data, deleteHandler }) {
 
     const saveTask = (e, taskId) => {
         e.preventDefault();
-        console.log(`save task ${taskId} from ${list._id}, new value: ${e.target.value}`);
         const ts = Date.now();
         const data = { task: e.target.value, ts: ts };
         fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}`, {
@@ -22,16 +21,15 @@ export default function TodoList({ data, deleteHandler }) {
             body: JSON.stringify(data)
         })
             .then((res) => {
-                console.log(res);
-                list.last_modified = ts;
-                setLastModified(ts);
+                if (res.ok) {
+                    list.last_modified = ts;
+                    setLastModified(ts);
+                }
             })
-            .catch((err) => { console.log(err) });
+            .catch((err) => { console.error(err) });
     }
 
     const saveTaskStatus = (e, taskId) => {
-        console.log('checkbox for task ' + taskId + ' was clicked');
-        console.log(`status: ${e.target.checked}`);
         const ts = Date.now();
         const data = { status: e.target.checked, ts: ts };
         fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}/status`, {
@@ -43,16 +41,16 @@ export default function TodoList({ data, deleteHandler }) {
             body: JSON.stringify(data)
         })
             .then((res) => {
-                console.log(res);
-                list.last_modified = ts;
-                setLastModified(ts);
+                if (res.ok) {
+                    list.last_modified = ts;
+                    setLastModified(ts);
+                }
             })
-            .catch((err) => { console.log(err) });
+            .catch((err) => { console.error(err) });
     }
 
     const deleteTask = (e, taskId) => {
         e.preventDefault();
-        console.log(`delete task ${taskId} from ${list._id}`);
         const ts = Date.now();
         const data = { ts: ts };
         fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}`, {
@@ -64,18 +62,18 @@ export default function TodoList({ data, deleteHandler }) {
             body: JSON.stringify(data)
         })
             .then((res) => {
-                console.log(res);
-                list.tasks = tasks.filter(task => task._id !== taskId);
-                setTasks(list.tasks);
-                list.last_modified = ts;
-                setLastModified(ts);
+                if (res.ok) {
+                    list.tasks = tasks.filter(task => task._id !== taskId);
+                    setTasks(list.tasks);
+                    list.last_modified = ts;
+                    setLastModified(ts);
+                }
             })
-            .catch((err) => { console.log(err) });
+            .catch((err) => { console.error(err) });
     }
 
     const deleteTodoList = (e) => {
         e.preventDefault();
-        console.log('was clicked delete todo list');
 
         fetch(`http://localhost:3000/api/todo/${list._id}`, {
             method: 'DELETE',
@@ -84,18 +82,17 @@ export default function TodoList({ data, deleteHandler }) {
             }
         })
             .then((res) => {
-                console.log(res);
-                deleteHandler(list._id);
+                if (res.ok) {
+                    deleteHandler(list._id);
+                }
             })
-            .catch((err) => { console.log(err) });
+            .catch((err) => { console.error(err) });
     }
 
     const addNewTask = (e) => {
         e.preventDefault();
         const ts = Date.now();
         const data = { ts: ts };
-
-        console.log('was clicked button add new task');
 
         fetch(`http://localhost:3000/api/todo/${list._id}`, {
             method: 'PUT',
@@ -108,14 +105,13 @@ export default function TodoList({ data, deleteHandler }) {
 
             .then(res => res.json())
             .then(task => {
-                console.log(task);
                 const newTasks = [...tasks];
                 newTasks.push(task);
                 setTasks(newTasks);
                 list.last_modified = ts;
                 setLastModified(ts);
             })
-            .catch((err) => { console.log(err) });
+            .catch((err) => { console.error(err) });
     }
 
     return (
