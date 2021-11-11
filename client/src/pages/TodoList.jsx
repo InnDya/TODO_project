@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Trash, Plus, XLg } from 'react-bootstrap-icons';
+const { callApi } = require('../api/api');
 
 const moment = require('moment');
 
@@ -12,97 +13,62 @@ export default function TodoList({ data, deleteHandler }) {
         e.preventDefault();
         const ts = Date.now();
         const data = { task: e.target.value, ts: ts };
-        fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then((res) => {
-                if (res.ok) {
-                    list.last_modified = ts;
-                    setLastModified(ts);
-                }
+        callApi(`${list._id}/task/${taskId}`, 'PUT', data)
+            .then(_ => {
+                list.last_modified = ts;
+                setLastModified(ts);
             })
-            .catch((err) => { console.error(err) });
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
-    const saveTaskStatus = (e, taskId) => {
+    const saveTaskStatus = (e, task) => {
+        const done = e.target.checked;
         const ts = Date.now();
-        const data = { status: e.target.checked, ts: ts };
-        fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}/status`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then((res) => {
-                if (res.ok) {
-                    list.last_modified = ts;
-                    setLastModified(ts);
-                }
+        const data = { status: done, ts: ts };
+        callApi(`${list._id}/task/${task._id}/status`, 'PUT', data)
+            .then(_ => {
+                list.last_modified = ts;
+                setLastModified(ts);
             })
-            .catch((err) => { console.error(err) });
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     const deleteTask = (e, taskId) => {
         e.preventDefault();
         const ts = Date.now();
         const data = { ts: ts };
-        fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then((res) => {
-                if (res.ok) {
-                    list.tasks = tasks.filter(task => task._id !== taskId);
-                    setTasks(list.tasks);
-                    list.last_modified = ts;
-                    setLastModified(ts);
-                }
+        callApi(`${list._id}/task/${taskId}`, 'DELETE', data)
+            .then(_ => {
+                list.tasks = tasks.filter(task => task._id !== taskId);
+                setTasks(list.tasks);
+                list.last_modified = ts;
+                setLastModified(ts);
             })
-            .catch((err) => { console.error(err) });
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     const deleteTodoList = (e) => {
         e.preventDefault();
-
-        fetch(`http://localhost:3000/api/todo/${list._id}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-            .then((res) => {
-                if (res.ok) {
-                    deleteHandler(list._id);
-                }
+        callApi(`${list._id}`, 'DELETE')
+            .then(_ => {
+                deleteHandler(list._id);
             })
-            .catch((err) => { console.error(err) });
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     const addNewTask = (e) => {
         e.preventDefault();
         const ts = Date.now();
         const data = { ts: ts };
-
-        fetch(`http://localhost:3000/api/todo/${list._id}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-
+        callApi(`${list._id}`, 'PUT', data)
             .then(res => res.json())
             .then(task => {
                 const newTasks = [...tasks];
@@ -111,7 +77,9 @@ export default function TodoList({ data, deleteHandler }) {
                 list.last_modified = ts;
                 setLastModified(ts);
             })
-            .catch((err) => { console.error(err) });
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     return (
@@ -130,7 +98,7 @@ export default function TodoList({ data, deleteHandler }) {
                                         aria-label="Checkbox for following text input"
                                         onChange={(e) => {
                                             task.status = !task.status;
-                                            saveTaskStatus(e, task._id)
+                                            saveTaskStatus(e, task)
                                         }}
                                     />
                                 </div>
