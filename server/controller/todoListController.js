@@ -71,3 +71,21 @@ exports.deleteTask = async (req, res) => {
         res.status(500).json(err);
     }
 }
+
+exports.changeStatus = async (req, res) => {
+    try {
+        await TodoList.updateOne({
+            _id: req.params.listId,
+            'tasks._id': req.params.taskId
+        }, {
+            $set: {
+                'tasks.$.status': req.body.status,
+                'last_modified': req.body.ts,
+            }
+        });
+        res.status(204).end();
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+}

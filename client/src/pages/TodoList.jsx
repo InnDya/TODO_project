@@ -7,7 +7,6 @@ export default function TodoList({ data, deleteHandler }) {
     const [list] = useState(data);
     const [tasks, setTasks] = useState(data.tasks);
     const [lastModified, setLastModified] = useState(data.last_modified);
-    const [status, setStatus] = useState(data.tasks.status);
 
     const saveTask = (e, taskId) => {
         e.preventDefault();
@@ -30,9 +29,25 @@ export default function TodoList({ data, deleteHandler }) {
         .catch((err) => {console.log(err)});
     }
 
-    const saveTaskStatus = (e) => {
-        e.preventDefault();
-        console.log(e,'was clicked checkbox');
+    const saveTaskStatus = (e, taskId) => {
+        console.log('checkbox for task ' + taskId + ' was clicked');
+        console.log(`status: ${e.target.checked}`);
+        const ts = Date.now();
+        const data = {status: e.target.checked, ts: ts};
+        fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}/status`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((res) => {
+            console.log(res);
+            list.last_modified = ts;
+            setLastModified(ts);
+        })
+        .catch((err) => {console.log(err)});
     }
 
     const deleteTask = (e, taskId) => {
@@ -115,9 +130,9 @@ export default function TodoList({ data, deleteHandler }) {
                                     <input 
                                         className="form-check-input mt-0" 
                                         type="checkbox" 
-                                        value={status} 
+                                        defaultChecked={task.status}
                                         aria-label="Checkbox for following text input"
-                                        onClick={(e) => saveTaskStatus(e)}
+                                        onChange={(e) => saveTaskStatus(e, task._id)}
                                     />
                                 </div>
                                 <input type="text" 
