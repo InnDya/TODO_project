@@ -12,7 +12,7 @@ export default function TodoList({ data, deleteHandler }) {
         e.preventDefault();
         console.log(`save task ${taskId} from ${list._id}, new value: ${e.target.value}`);
         const ts = Date.now();
-        const data = {task: e.target.value, ts: ts};
+        const data = { task: e.target.value, ts: ts };
         fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}`, {
             method: 'PUT',
             headers: {
@@ -21,19 +21,19 @@ export default function TodoList({ data, deleteHandler }) {
             },
             body: JSON.stringify(data)
         })
-        .then((res) => { 
-            console.log(res);
-            list.last_modified = ts;
-            setLastModified(ts);
-        })
-        .catch((err) => {console.log(err)});
+            .then((res) => {
+                console.log(res);
+                list.last_modified = ts;
+                setLastModified(ts);
+            })
+            .catch((err) => { console.log(err) });
     }
 
     const saveTaskStatus = (e, taskId) => {
         console.log('checkbox for task ' + taskId + ' was clicked');
         console.log(`status: ${e.target.checked}`);
         const ts = Date.now();
-        const data = {status: e.target.checked, ts: ts};
+        const data = { status: e.target.checked, ts: ts };
         fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}/status`, {
             method: 'PUT',
             headers: {
@@ -42,19 +42,19 @@ export default function TodoList({ data, deleteHandler }) {
             },
             body: JSON.stringify(data)
         })
-        .then((res) => {
-            console.log(res);
-            list.last_modified = ts;
-            setLastModified(ts);
-        })
-        .catch((err) => {console.log(err)});
+            .then((res) => {
+                console.log(res);
+                list.last_modified = ts;
+                setLastModified(ts);
+            })
+            .catch((err) => { console.log(err) });
     }
 
     const deleteTask = (e, taskId) => {
         e.preventDefault();
         console.log(`delete task ${taskId} from ${list._id}`);
         const ts = Date.now();
-        const data = {ts: ts};
+        const data = { ts: ts };
         fetch(`http://localhost:3000/api/todo/${list._id}/task/${taskId}`, {
             method: 'DELETE',
             headers: {
@@ -63,14 +63,14 @@ export default function TodoList({ data, deleteHandler }) {
             },
             body: JSON.stringify(data)
         })
-        .then((res) => {
-            console.log(res);
-            list.tasks = tasks.filter(task => task._id !== taskId);
-            setTasks(list.tasks);
-            list.last_modified = ts;
-            setLastModified(ts);
-        })
-        .catch((err) => {console.log(err)});
+            .then((res) => {
+                console.log(res);
+                list.tasks = tasks.filter(task => task._id !== taskId);
+                setTasks(list.tasks);
+                list.last_modified = ts;
+                setLastModified(ts);
+            })
+            .catch((err) => { console.log(err) });
     }
 
     const deleteTodoList = (e) => {
@@ -83,18 +83,18 @@ export default function TodoList({ data, deleteHandler }) {
                 'Accept': 'application/json'
             }
         })
-        .then((res) => {
-            console.log(res);
-            deleteHandler(list._id);
-        })
-        .catch((err) => {console.log(err)});
+            .then((res) => {
+                console.log(res);
+                deleteHandler(list._id);
+            })
+            .catch((err) => { console.log(err) });
     }
 
     const addNewTask = (e) => {
         e.preventDefault();
         const ts = Date.now();
-        const data = {ts: ts};
-    
+        const data = { ts: ts };
+
         console.log('was clicked button add new task');
 
         fetch(`http://localhost:3000/api/todo/${list._id}`, {
@@ -106,16 +106,16 @@ export default function TodoList({ data, deleteHandler }) {
             body: JSON.stringify(data)
         })
 
-        .then(res => res.json())
-        .then(task => {
-            console.log(task);
-            const newTasks = [...tasks];
-            newTasks.push(task);
-            setTasks(newTasks);
-            list.last_modified = ts;
-            setLastModified(ts);
-        })
-        .catch((err) => {console.log(err)});
+            .then(res => res.json())
+            .then(task => {
+                console.log(task);
+                const newTasks = [...tasks];
+                newTasks.push(task);
+                setTasks(newTasks);
+                list.last_modified = ts;
+                setLastModified(ts);
+            })
+            .catch((err) => { console.log(err) });
     }
 
     return (
@@ -127,17 +127,20 @@ export default function TodoList({ data, deleteHandler }) {
                         <li className="list-group list-group-flush" key={task._id}>
                             <div className="input-group mb-3">
                                 <div className="input-group-text">
-                                    <input 
-                                        className="form-check-input mt-0" 
-                                        type="checkbox" 
+                                    <input
+                                        className="form-check-input mt-0"
+                                        type="checkbox"
                                         defaultChecked={task.status}
                                         aria-label="Checkbox for following text input"
-                                        onChange={(e) => saveTaskStatus(e, task._id)}
+                                        onChange={(e) => {
+                                            task.status = !task.status;
+                                            saveTaskStatus(e, task._id)
+                                        }}
                                     />
                                 </div>
-                                <input type="text" 
-                                    className="form-control" 
-                                    aria-label="Text input with checkbox" 
+                                <input type="text"
+                                    className="form-control"
+                                    aria-label="Text input with checkbox"
                                     defaultValue={task.task}
                                     onBlur={(e) => saveTask(e, task._id)}
                                     onKeyDown={(e) => {
@@ -145,6 +148,7 @@ export default function TodoList({ data, deleteHandler }) {
                                             saveTask(e, task._id)
                                         }
                                     }}
+                                    style={{ textDecorationLine: task.status ? 'line-through' : 'none' }}
                                 />
                                 <button className="btn btn-outline" onClick={(e) => deleteTask(e, task._id)}>
                                     <XLg color="royalblue" size={16} />
@@ -154,21 +158,21 @@ export default function TodoList({ data, deleteHandler }) {
                     )}
                 </ul>
                 <div className="mb-4">
-                    <button 
-                        className="btn-primary" 
+                    <button
+                        className="btn-primary"
                         onClick={(e) => addNewTask(e)}>
-                    <Plus size={20} />
+                        <Plus size={20} />
                     </button> Add new task
                 </div>
                 <div className="position-absolute bottom-0 start-0 text-muted">
-                {moment(lastModified).fromNow()}
+                    {moment(lastModified).fromNow()}
                 </div>
             </div>
-            <Trash 
-                size={26} 
-                color="royalblue" 
+            <Trash
+                size={26}
+                color="royalblue"
                 className="position-absolute bottom-0 end-0"
-                onClick={(e)=> deleteTodoList(e)}
+                onClick={(e) => deleteTodoList(e)}
             />
         </div>
     )
