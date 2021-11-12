@@ -12,4 +12,4 @@ const callApi = async (path, method, data = null) => {
     .then(res => res);
 }
 
-export default callApi;
+export { callApi };
