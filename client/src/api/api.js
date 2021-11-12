@@ -1,4 +1,4 @@
-const baseURL = process.env.serverURL || 'http://localhost:3000';
+const baseURL = 'https://inna-todoapp.herokuapp.com';
 
 const callApi = async (path, method, data = null) => {
     return fetch(baseURL + '/api/todo' + path, {
