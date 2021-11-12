@@ -1,7 +1,7 @@
 const baseURL = process.env.serverURL || 'http://localhost:3000';
 
 const callApi = async (path, method, data = null) => {
-    return fetch(baseURL + '/api/todo/' + path, {
+    return fetch(baseURL + '/api/todo' + path, {
         method: method,
         headers: {
             'Accept': 'application/json',

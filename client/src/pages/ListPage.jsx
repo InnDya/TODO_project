@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import TodoList from './TodoList';
 import NewList from './NewList';
+const { callApi } = require('../api/api');
 
 export default function ListPage() {
     const [data, setData] = useState([]);
 
     function getTodoLists() {
-        const url = 'http://localhost:3000/api/todo'
-        fetch(url)
+        callApi('', 'GET')
             .then(res => res.json())
             .then(data => setData(data));
     }

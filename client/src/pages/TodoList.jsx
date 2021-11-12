@@ -13,7 +13,7 @@ export default function TodoList({ data, deleteHandler }) {
         e.preventDefault();
         const ts = Date.now();
         const data = { task: e.target.value, ts: ts };
-        callApi(`${list._id}/task/${taskId}`, 'PUT', data)
+        callApi(`/${list._id}/task/${taskId}`, 'PUT', data)
             .then(_ => {
                 list.last_modified = ts;
                 setLastModified(ts);
@@ -27,7 +27,7 @@ export default function TodoList({ data, deleteHandler }) {
         const done = e.target.checked;
         const ts = Date.now();
         const data = { status: done, ts: ts };
-        callApi(`${list._id}/task/${task._id}/status`, 'PUT', data)
+        callApi(`/${list._id}/task/${task._id}/status`, 'PUT', data)
             .then(_ => {
                 list.last_modified = ts;
                 setLastModified(ts);
@@ -41,7 +41,7 @@ export default function TodoList({ data, deleteHandler }) {
         e.preventDefault();
         const ts = Date.now();
         const data = { ts: ts };
-        callApi(`${list._id}/task/${taskId}`, 'DELETE', data)
+        callApi(`/${list._id}/task/${taskId}`, 'DELETE', data)
             .then(_ => {
                 list.tasks = tasks.filter(task => task._id !== taskId);
                 setTasks(list.tasks);
@@ -55,7 +55,7 @@ export default function TodoList({ data, deleteHandler }) {
 
     const deleteTodoList = (e) => {
         e.preventDefault();
-        callApi(`${list._id}`, 'DELETE')
+        callApi(`/${list._id}`, 'DELETE')
             .then(_ => {
                 deleteHandler(list._id);
             })
@@ -68,7 +68,7 @@ export default function TodoList({ data, deleteHandler }) {
         e.preventDefault();
         const ts = Date.now();
         const data = { ts: ts };
-        callApi(`${list._id}`, 'PUT', data)
+        callApi(`/${list._id}`, 'PUT', data)
             .then(res => res.json())
             .then(task => {
                 const newTasks = [...tasks];

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Plus } from 'react-bootstrap-icons';
+const { callApi } = require('../api/api');
 
 export default function NewList({ createHandler }) {
 
@@ -8,14 +9,7 @@ export default function NewList({ createHandler }) {
         if (title) {
             const ts = Date.now();
             const data = { title: title, ts: ts };
-            fetch(`http://localhost:3000/api/todo`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
+            callApi('', 'POST', data)
                 .then(res => res.json())
                 .then(list => {
                     createHandler(list);
