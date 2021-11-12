@@ -1,0 +1,13 @@
+{
+    "name": "todo-app",
+    "version": "0.1.0",
+    "scripts": {
+      "build": "(cd client && npm install && npm run build && cd ../server && npm install)",
+      "start": "(cd server && npm start)"
+    },
+    "engines": {
+      "node": "14.x",
+      "npm": "6.x"
+    }
+  }
+  

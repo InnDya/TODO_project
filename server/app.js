@@ -23,6 +23,8 @@ const app = express();
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
+const clientPath = path.join(__dirname, '../client', 'build');
+app.use(express.static(clientPath));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
